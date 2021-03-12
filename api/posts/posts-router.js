@@ -42,6 +42,7 @@ router.get('/:id', (req, res) => {
 // ?? GET ==> /api/posts/:id/comments ==> Return array of comment objects
 
 // ?? POST ==> /api/posts ==> Create post ==> Return post object
+
 router.post('/', async (req, res) => {
 	const post = req.body;
 
@@ -89,5 +90,25 @@ router.put('/:id', async (req, res) => {
 });
 
 // ?? DELETE ==> /api/posts/:id ==> Remove post ==> Return removed post
+router.delete('/:id', (req, res) => {
+	Post.remove(req.params.id)
+		.then((count) => {
+			if (count > 0) {
+				res.status(200).json({
+					message: 'The post has been deleted',
+				});
+			} else {
+				res.status(404).json({
+					message: `The post with the specified ID (${req.params.id}) does not exist`,
+				});
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				message: 'The post could not be removed',
+			});
+		});
+});
 
 module.exports = router;
