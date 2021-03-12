@@ -20,6 +20,24 @@ router.get('/', (req, res) => {
 });
 
 // ?? GET ==> /api/posts/:id ==> Return post object with specified id
+router.get('/:id', (req, res) => {
+	Post.findById(req.params.id)
+		.then((post) => {
+			if (post) {
+				res.status(200).json(post);
+			} else {
+				res.status(404).json({
+					message: `The post with the specified ID (${req.params.id}) does not exist`,
+				});
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				message: 'The post information could not be retrieved',
+			});
+		});
+});
 
 // ?? GET ==> /api/posts/:id/comments ==> Return array of comment objects
 
